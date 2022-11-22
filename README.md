@@ -7,6 +7,7 @@
 ## 步骤
 
 ```bash
+# 第一步
 # 新建项目
 yarn create react-app antd-react-test
 # or
@@ -14,6 +15,12 @@ yarn create react-app .
 
 npm start
 # http://localhost:3000/
+
+# 第二步
+yarn add antd
+# App.js 引入 Button 组件
+
+# 打断点，vscode 启动 launch.json
 ```
 
 
