@@ -68,8 +68,8 @@ Button.tsx =====> Button.js ========> Button.js ========> bundle.js
 # 想要 sourcemap 映射到 tsx 源码，需要把 devtool 设置成 cheap-module-source-map，然后开启 babel-loader 和 ts-loader 的 sourcemap。
 
 # sourceMap 解决方案: `node_modules/@ant-design/tools/lib/getWebpackConfig.js`
-# 1. babelConfig.sourceMap = true;
-# 2. `devtool: 'source-map',` 改为 `devtool: 'cheap-module-source-map',`
+# 1. 新增配置 `babelConfig.sourceMap = true;` 开启 babel 的 sourceMap
+# 2. `devtool: 'source-map',` 改为 `devtool: 'cheap-module-source-map',` 支持关联 loader
 # 3. ts 也要生成 sourceMap, 在 antd 根目录的 tsconfig.json里改 `"sourceMap": true,`
 
 # 重新编译 dist，将 dist 覆盖原依赖文件 node_modules/antd/dist
@@ -78,6 +78,38 @@ npm run dist
 # 最后一步，要清除项目的 babel-loader 缓存 `node_modules/.cache/babel-loader`
 # 重新debug，已经可以调试 antd 源码了
 ```
+
+参考代码
+
+- https://babeljs.io/docs/en/options#sourcemaps
+
+```ts
+babelConfig.sourceMaps = true;
+```
+
+- https://github.com/ant-design/antd-tools/blob/826a3c96c93e407dbff1c04f02de866261af4157/lib/getWebpackConfig.js#L61-L62
+  - 修改此处 `devtool`
+- https://github.com/ant-design/antd-tools/blob/826a3c96c93e407dbff1c04f02de866261af4157/lib/getWebpackConfig.js#L108-L150
+  - 此处的 rules 中 `babel-loader` 会使用到配置 `babelConfig.sourceMaps`
+
+```ts
+  const babelConfig = require('./getBabelCommonConfig')(modules || false);
+
+  // 新增配置
+  babelConfig.sourceMaps = true; // 推荐
+  // babelConfig.sourceMap = true;
+
+  const config = {
+    devtool: 'source-map',
+    // 改为
+    devtool: 'cheap-module-source-map',
+
+    output: {
+      path: getProjectPath('./dist/'),
+      filename: '[name].js',
+    },
+```
+
 
 # Getting Started with Create React App
 
