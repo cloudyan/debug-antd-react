@@ -110,6 +110,9 @@ babelConfig.sourceMaps = true;
     },
 ```
 
+担心 node_modules 下的改动保存不下来？可以执行下 `npx patch-package antd`，会生成这样一个 patch 文件:
+
+patch 文件里记录了你对 antd 包的改动，这个可以上传到 git 仓库，其他小伙伴拉下来再执行 `npx patch-package` 就会自动应用这些改动。
 
 # Getting Started with Create React App
 
